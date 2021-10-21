@@ -22,7 +22,7 @@ const AVERAGE_STATS_MAP = {
   i6: 'averageKills'
 }
 
-export const mapAverageStats = stats =>
+export const mapAverageStats = stats => {
   stats
     .map(stat =>
       Object.keys(AVERAGE_STATS_MAP).reduce(
@@ -64,54 +64,47 @@ export const mapAverageStats = stats =>
           } else {
             value = (acc[curr2] || []).concat(curr[curr2])
           }
-
           return {
             ...acc2,
             [curr2]: value
           }
+
         }, {}),
       {}
     )
-
-export const mapAverageStatsMemoized = mem(mapAverageStats)
-
-const PLAYER_MAP_STATS = {
-  deDust2: {
-    k6: 'dust2'
-  },
-  deMirage: {
-    k6: 'mirage'
-  },
-  deNuke: {
-    k6: 'nuke'
-  },
-  deOverpass: {
-    k6: 'overpass'
-  },
-  deTrain: {
-    k6: 'train'
-  },
-  deInferno: {
-    k6: 'inferno'
-  },
-  deVertigo: {
-    k6: 'vertigo'
-  },
-  deAncient: {
-    k6: 'ancient'
   }
+
+    export const mapAverageStatsMemoized = mem(mapAverageStats)
+
+    const PLAYER_MAP_STATS = {
+      deDust2: 0,
+      deMirage: 0,
+      deNuke: 0,
+      deOverpass: 0,
+      deTrain: 0,
+      deInferno: 0,
+      deVertigo: 0,
+      deAncient: 0
+    }
+
+export const PlayerMapStats = stats => {
+  let result = stats[0].segments;
+  /* console.log("Before: ", result); */
+  /* console.log(Object.keys(result));
+  console.log(Object.values(result)); */
+  /* console.log(Object.entries(result)); */
+  let newObject = {};
+  Object.entries(result).map(item => {
+    var temp = {[item[0]]: item[1].k6}
+    console.log(temp)
+    Object.assign(newObject, temp);
+  })
+  console.log("New Object: ", newObject);
+
+  return newObject;
 }
 
-// TODO Fix this and it will work. Make sure you understand it
-export const playerMapStats = mapStats =>
-  mapStats.map(stat =>
-    Object.keys(PLAYER_MAP_STATS).reduce(
-      (acc, curr) => ({
-        ...acc,
-        [PLAYER_MAP_STATS[curr]]: stat[curr]
-      }),
-      {}
-    )
-  )
+export const playerMapStatsMemoized = mem(PlayerMapStats);
 
-export const playerMapStatsMemoized = mem(playerMapStats)
+    
+

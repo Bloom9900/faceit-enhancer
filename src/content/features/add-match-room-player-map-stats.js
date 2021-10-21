@@ -60,22 +60,22 @@ export default async parent => {
         userId = player.id
       }
 
-      const mapStats = await getPlayerStats(userId, game)
+      const { playerMapStats } = await getPlayerStats(userId, game)
 
-      if (!mapStats) {
+      if (!playerMapStats) {
         return
       }
 
       const mapStatsElement = createPlayerMapStatsElement({
-        ...mapStats,
+        ...playerMapStats,
         alignRight: !isFaction1
       })
 
-      const memberDetailsElement = select(
+      /* const memberDetailsElement = select(
         '.match-team-member__details',
         memberElement
       )
-      memberDetailsElement.after(mapStatsElement)
+      memberDetailsElement.after(mapStatsElement) */
     })
   })
 }

@@ -73,7 +73,8 @@ export const getPlayerMatches = (userId, game, size = 20) =>
     `/stats/v1/stats/time/users/${userId}/games/${game}?size=${size}`
   )
 
-export const getPlayerStats = async (userId, game, size = 20) => {
+export const getPlayerStats = async (userId, game, size = 21) => {
+  // ONly CS:GO is supported
   if (game !== 'csgo') {
     return null
   }
@@ -88,7 +89,7 @@ export const getPlayerStats = async (userId, game, size = 20) => {
 
   totalStats = mapTotalStatsMemoized(totalStats.lifetime)
 
-  const playerMapStats = await fetchApiMemoized(
+  let playerMapStats = await fetchApiMemoized(
     `/stats/v1/stats/users/${userId}/games/${game}`
   )
 
@@ -96,9 +97,9 @@ export const getPlayerStats = async (userId, game, size = 20) => {
     return null
   }
 
-  /* Console.log(playerMapStats.lifetime.id.playerId)
-  console.log(playerMapStats.segments[0].segments.deOverpass.k6)
-  playerMapStats = playerMapStatsMemoized(playerMapStats.segments[0].segments.deOverpass.k6) */
+  playerMapStats = playerMapStats.segments.filter(stats => stats.id.gameMode == "5v5" && stats.id.segmentId.includes("csgo_map"))
+
+  playerMapStats = playerMapStatsMemoized(playerMapStats)
 
   let averageStats = await fetchApiMemoized(
     `/stats/v1/stats/time/users/${userId}/games/${game}?size=${size}`
